@@ -6,10 +6,13 @@ import sqlite3
 app = Flask(__name__, template_folder="templates")
 
 
-def db_query_sqlite(query: str, args=(), many=True) -> tuple | list[tuple] | None:
+def db_query_sqlite(query, args=None, many=True):
     with sqlite3.connect('database/database.db') as connection:
         cursor = connection.cursor()
-        cursor.execute(query, args)
+        if args is not None:
+            cursor.execute(query, args)
+        else:
+            cursor.execute(query)
         try:
             if many:
                 return cursor.fetchall()
